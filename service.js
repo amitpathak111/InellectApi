@@ -1,10 +1,12 @@
 
-  var express = require('express')
-  , bodyParser = require('body-parser')
-  , logger = require('morgan')
-  , http = require('http');
+  const express = require('express');
+  const bodyParser = require('body-parser');
+  const logger = require('morgan');
+  const http = require('http');
+  const tradeHandler = require('./repository/trade_handler.js');
+  const stockHandler = require('./repository/stock_data_handler.js');
 
-var app = express();
+  const app = express();
 
   app.set('port', process.env.PORT || 9020);
   app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
@@ -12,40 +14,18 @@ var app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(logger('dev'));;
 
+  app.use('/trades', tradeHandler);
+  app.use('/stocks', stockHandler);
 
 
-app.delete('/erase', function (req, res) {
+app.delete('/erase',function(req,res) {
 
 	res.send("erase")
 
 });
 
-app.post('/trades',function(req,res){
-
-	res.send("add trades")
-})
-
-app.get('/trades',function(req,res){
-
-	res.send("get trades")
-})
-
-app.get('/trades/users/:userID',function(req,res){
-
-	res.send("user trade detail")
-});
-
-app.get('/stocks/:stockSymbol/trades',function(req,res){
-
-  	res.send('200')
-});
 
 
-app.get('/stocks/:stockSymbol/price',function(req,res){
-
-	res.send('200')
-
-});
 
 
 http.createServer(app).listen(app.get('port'), function () {
