@@ -5,6 +5,7 @@
   const http = require('http');
   const tradeHandler = require('./repository/trade_handler.js');
   const stockHandler = require('./repository/stock_data_handler.js');
+  const misc = require('./repository/misc.js');
 
   const app = express();
 
@@ -16,18 +17,9 @@
 
   app.use('/trades', tradeHandler);
   app.use('/stocks', stockHandler);
-
-
-app.delete('/erase',function(req,res) {
-
-	res.send("erase")
-
-});
-
-
-
+  app.use('/erase', misc);
 
 
 http.createServer(app).listen(app.get('port'), function () {
-    console.log(" Server Ready To listen On IP " + app.get('ipaddr') + " Port " + app.get('port'));
+    console.log(" Server listening On IP " + app.get('ipaddr') + " Port " + app.get('port'));
 });
